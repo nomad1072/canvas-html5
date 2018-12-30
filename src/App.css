@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  width: 100vw;
+  display: flex;
 }
 
 .App-logo {
@@ -29,4 +31,27 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.canvasContainer {
+  /* background-color: red; */
+  width: 80vw;
+}
+
+.thumbnailsContainer {
+  width: 20vw;
+  /* background-color: blue; */
+}
+
+.thumbnail {
+  text-align: center;
+  padding-left: 10px;
+  padding-top: 10px; 
+}
+
+.thumbnailText {
+  color: #61dafb;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  text-align: center
 }
