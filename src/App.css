@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   width: 100vw;
+  height: 100vh;
   display: flex;
 }
 
@@ -36,6 +37,8 @@
 .canvasContainer {
   /* background-color: red; */
   width: 80vw;
+  overflow: hidden;
+  display: block;
 }
 
 .thumbnailsContainer {
@@ -53,5 +56,5 @@
   color: #61dafb;
   padding-bottom: 10px;
   padding-left: 10px;
-  text-align: center
+  text-align: center;
 }

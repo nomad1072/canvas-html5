@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js';
 import logo from './logo.svg';
+import Draggable from 'react-draggable'; // The default
 import './App.css';
+import Resizable from 're-resizable';
+// const Resizable = require('react-resizable').Resizable; // or,
+const ResizableBox = require('react-resizable').ResizableBox;
+
+
 
 class App extends Component {
 
@@ -9,11 +15,11 @@ class App extends Component {
     context: {}
   }
 
-  componentDidMount() {
-    const canvas = this.refs.canvas;
-    const ctx = canvas.getContext("2d");
-    this.setState({context: ctx});
-  }
+  // componentDidMount() {
+  //   const canvas = this.refs.canvas;
+  //   const ctx = canvas.getContext("2d");
+  //   this.setState({context: ctx});
+  // }
 
   // componentDidUpdate() {
   //   const canvas = this.refs.canvas;
@@ -55,12 +61,8 @@ class App extends Component {
                   }
               }]
           },
-          events: [],
-          onResize: (ctx, size) => {
-            console.log('On Resize called');
-            console.log('ctx: ', ctx);
-            console.log('size: ', size);
-          }
+          maintainAspectRatio: false,
+          events: []
       }
     });
   }
@@ -81,6 +83,7 @@ class App extends Component {
                   stacked: true
               }]
           },
+          maintainAspectRatio: false,
           events: []
       }
   });
@@ -102,11 +105,10 @@ class App extends Component {
         ]
     },
     options: {
-      events: []
+      events: [],
+      maintainAspectRatio: false
     }
   });
-
-    
   }
 
   handleDragEnd = (event, type) => {
@@ -114,16 +116,17 @@ class App extends Component {
     event.preventDefault();
     const width = window.innerWidth && (Math.round(0.8*window.innerWidth));
     if(event.clientX < width) {
-      const canvas = document.getElementById("canvas");
-      const ctx = this.state.context;
-      // ctx.fillStyle = "#ffffff";
-      // ctx.fillRect(0,0,canvas.width, canvas.height);
-      // ctx.clearRect(0, 0, canvas.width, canvas.height);
       if(type === "bar") {
+        const ctx = document.getElementById('canvas-container-pie');
+        // ctx.clearRect(0, 0, ctx.width, ctx.height);        
         this.drawBarGraph(ctx);
       } else if(type === "line") {
+        // const ctx = document.getElementById('canvas-container');
+        const ctx = document.getElementById('canvas-container-bar');
         this.drawLineGraph(ctx);
       } else if(type === "pie") {
+        // const ctx = document.getElementById('canvas-container');
+        const ctx = document.getElementById('canvas-container-line');
         this.drawPieChart(ctx);
       }
       
@@ -140,15 +143,36 @@ class App extends Component {
 
     return (
       <div className="App">
-        <div className="canvasContainer">
-          <canvas ref="canvas" id="canvas">
-
-          </canvas>
+        <div className="canvasContainer" id="canvasContainer">
+          <div>
+            <Draggable>
+              <Resizable defaultSize={{ width:320, height:200 }}>
+                  <canvas ref="canvas" id="canvas-container-pie">
+                  </canvas> 
+              </Resizable>
+            </Draggable>
+          </div>
+          <div>
+            <Draggable>
+              <Resizable defaultSize={{ width:320, height:200 }}>
+                  <canvas ref="canvas" id="canvas-container-bar">
+                  </canvas> 
+              </Resizable>
+            </Draggable>
+          </div>
+          <div>
+            <Draggable>
+              <Resizable defaultSize={{ width:320, height:200 }}>
+                  <canvas ref="canvas" id="canvas-container-line">
+                  </canvas> 
+              </Resizable>
+            </Draggable>
+          </div>
         </div>
         <div className="thumbnailsContainer">
             {thumbnails.map((thumbnail, index) => {
               return (
-                <div draggable={true} onDragEnd={(event) => {this.handleDragEnd(event, thumbnail.type)}} className="thumbnail" key={index}>
+                <div draggable="true" onDragEnd={(event) => {this.handleDragEnd(event, thumbnail.type)}} className="thumbnail" key={index}>
                   <img src={thumbnail.src} alt={thumbnail.name}></img>
                   <span className="thumbanailText" >{thumbnail.name}</span>
                 </div>
